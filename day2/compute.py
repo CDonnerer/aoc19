@@ -1,4 +1,4 @@
-"""Gravity assist program
+"""Day 2 of advent of code: gravity assist program
 """
 import operator
 
@@ -10,12 +10,10 @@ example_input = [1, 1, 1, 4, 99, 5, 6, 0, 99]
 
 
 def get_operation(opcode):
-    if opcode == 1:
-        return operator.add
-    elif opcode == 2:
-        return operator.mul
-    else:
-        return None
+    """Map the opcode to the right operation
+    """
+    opcodes = {1: operator.add, 2: operator.mul}
+    return opcodes.get(opcode, None)
 
 
 def process_instruction(code, starting_pos=0):
@@ -28,7 +26,6 @@ def process_instruction(code, starting_pos=0):
     output_val = operation(input1, input2)
 
     code[code[starting_pos + 3]] = output_val
-
     return code
 
 
@@ -49,9 +46,8 @@ def load_input(path="input.dat"):
 
 
 def main():
-    """Load in the masses and Caclculate part one and part two
     """
-
+    """
     for noun in range(0, 99):
         for verb in range(0, 99):
             code = load_input()
