@@ -21,11 +21,31 @@ def test_increasing_digits(number):
     return True
 
 
+def test_identical_pair_only(number):
+    previous_digit = None
+    group = ""
+
+    for digit in str(number) + "x":
+        if digit == previous_digit:
+            group += str(digit)
+        else:
+            if len(group) == 1:
+                return True
+            group = ""
+        previous_digit = digit
+    return False
+
+
+# 111 22
+
+
 def main():
     matching = 0
     for password in range(248345, 746315 + 1):
-        if test_identical_adjacent_digits(password) and test_increasing_digits(
-            password
+        if (
+            test_identical_adjacent_digits(password)
+            and test_increasing_digits(password)
+            and test_identical_pair_only(password)
         ):
             matching += 1
     print(matching)
