@@ -1,8 +1,7 @@
 """Day 8 of AoC. Image data parsing.
 """
 import numpy as np
-
-example_input = "123456789012"
+import pandas as pd
 
 
 def parse_image(image: str, width: int, height: int):
@@ -30,9 +29,19 @@ def load_input(path="input.dat"):
     return str(np.loadtxt(path, dtype=str))
 
 
+def print_image(image):
+    """Given input image as 2d np.ndarray, we print nicely to console
+    """
+    df = pd.DataFrame(image, dtype=int)
+    df = df.replace({0: " ", 1: "o"})  # for ease of reading the chars
+    print(df)  # print to console
+
+
 def main():
     """
     """
+    # example_input = "123456789012"
+
     image = load_input()
 
     layers = parse_image(image=image, width=25, height=6)
@@ -48,6 +57,26 @@ def main():
     n_twos = sum(sum(layers[fewest_zeros] == 2))
 
     print(n_ones, n_twos, n_ones * n_twos)
+
+    # Part 2.
+    # From first layer, take everything non-transparent
+    # Then from the second layer, add everything
+
+    # example_image = "0222112222120000"
+    # layers = parse_image(image=example_image, width=2, height=2)
+
+    final_image = np.zeros_like(layers[0])
+    previous_filled = np.zeros_like(final_image)
+    previous_filled = False
+
+    for layer in layers:
+        is_transparent = layer == 2
+        # fill pixels if not previously filled and not transparent now
+        to_fill = ~previous_filled & ~is_transparent
+        final_image[to_fill] = layer[to_fill]
+        previous_filled = np.logical_or(previous_filled, to_fill)
+
+    print_image(final_image)
 
 
 if __name__ == "__main__":
