@@ -5,6 +5,8 @@ import pandas as pd
 
 
 def parse_image(image: str, width: int, height: int):
+    """Parse image str, based on width and height
+    """
     split_img = [pixel for pixel in image]
     n_layers = int(len(split_img) / (width * height))
 
@@ -37,14 +39,7 @@ def print_image(image):
     print(df)  # print to console
 
 
-def main():
-    """
-    """
-    # example_input = "123456789012"
-
-    image = load_input()
-
-    layers = parse_image(image=image, width=25, height=6)
+def part_1(layers):
     l_zeros = list()
 
     for layer in layers:
@@ -56,15 +51,10 @@ def main():
     n_ones = sum(sum(layers[fewest_zeros] == 1))
     n_twos = sum(sum(layers[fewest_zeros] == 2))
 
-    print(n_ones, n_twos, n_ones * n_twos)
+    return n_ones * n_twos
 
-    # Part 2.
-    # From first layer, take everything non-transparent
-    # Then from the second layer, add everything
 
-    # example_image = "0222112222120000"
-    # layers = parse_image(image=example_image, width=2, height=2)
-
+def part_2(layers):
     final_image = np.zeros_like(layers[0])
     previous_filled = np.zeros_like(final_image)
     previous_filled = False
@@ -76,6 +66,27 @@ def main():
         final_image[to_fill] = layer[to_fill]
         previous_filled = np.logical_or(previous_filled, to_fill)
 
+    return final_image
+
+
+def main():
+    """
+    """
+    # example_input = "123456789012"
+    # layers = parse_image(image=example_input, width=25, height=6)
+
+    image = load_input()
+    layers = parse_image(image=image, width=25, height=6)
+
+    solution = part_1(layers)
+    print(solution)
+
+    # Part 2.
+
+    # example_image = "0222112222120000"
+    # layers = parse_image(image=example_image, width=2, height=2)
+
+    final_image = part_2(layers)
     print_image(final_image)
 
 
